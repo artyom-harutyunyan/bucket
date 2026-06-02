@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Category {
+  id        String         @id @default(cuid())
+  name      String
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  items     ItemCategory[]
+
+  @@map("categories")
+}
+
+model Item {
+  id          String         @id @default(cuid())
+  title       String
+  description String         @default("")
+  source      String         @default("")
+  imageData   String?        @db.Text
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  categories  ItemCategory[]
+
+  @@map("items")
+}
+
+model ItemCategory {
+  itemId     String
+  categoryId String
+  item       Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([itemId, categoryId])
+  @@map("item_categories")
+}
