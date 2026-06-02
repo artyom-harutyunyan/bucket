@@ -16,13 +16,4 @@ export function parsePage(value: string | null | undefined): number {
   return Number.isFinite(page) && page > 0 ? page : 1;
 }
 
-export function itemSearchFilter(q: string | undefined) {
-  const trimmed = q?.trim();
-  if (!trimmed) {
-    return {};
-  }
-  const needle = trimmed.toLowerCase().replace(/\s+/g, " ").trim();
-  return {
-    searchText: { contains: needle, mode: "insensitive" as const },
-  };
-}
+export { itemSearchFilter } from "@/lib/search-tokens";

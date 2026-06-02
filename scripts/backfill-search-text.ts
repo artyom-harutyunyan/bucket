@@ -1,9 +1,6 @@
 import "dotenv/config";
-import {
-  buildSearchText,
-  prepareItemForDb,
-  safeDecryptAtRest,
-} from "../src/lib/field-crypto";
+import { isObfuscatedSearchIndex } from "../src/lib/search-tokens";
+import { prepareItemForDb, safeDecryptAtRest } from "../src/lib/field-crypto";
 import { prisma } from "../src/lib/db";
 
 const ENCRYPTED_PREFIX = "enc:v1:";
@@ -29,14 +26,13 @@ async function main() {
     const title = safeDecryptAtRest(item.title);
     const description = safeDecryptAtRest(item.description);
     const source = safeDecryptAtRest(item.source);
-    const searchText = buildSearchText(title, description);
     const prepared = prepareItemForDb({ title, description, source });
 
     const needsEncrypt =
       !isEncrypted(item.title) ||
       !isEncrypted(item.description) ||
       (source !== "" && !isEncrypted(item.source));
-    const needsSearchText = searchText !== item.searchText;
+    const needsSearchText = !isObfuscatedSearchIndex(item.searchText);
 
     if (!needsEncrypt && !needsSearchText) {
       continue;
@@ -50,7 +46,7 @@ async function main() {
   }
 
   console.log(
-    `Encrypted fields and/or search text for ${updated} of ${items.length} items.`,
+    `Rebuilt obfuscated search index for ${updated} of ${items.length} items.`,
   );
 }
 

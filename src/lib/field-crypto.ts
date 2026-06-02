@@ -4,6 +4,7 @@ import {
   randomBytes,
   scryptSync,
 } from "crypto";
+import { buildSearchTokenIndex } from "@/lib/search-tokens";
 
 const PREFIX = "enc:v1:";
 const ALGORITHM = "aes-256-gcm";
@@ -69,15 +70,6 @@ export type ItemTextFields = {
   source: string;
 };
 
-/** Lowercase index for DB search (title + description, not encrypted). */
-export function normalizeSearchText(text: string): string {
-  return text.toLowerCase().replace(/\s+/g, " ").trim();
-}
-
-export function buildSearchText(title: string, description: string): string {
-  return normalizeSearchText(`${title} ${description}`);
-}
-
 export function encryptItemFieldsForDb(fields: ItemTextFields): ItemTextFields {
   return {
     title: encryptAtRest(fields.title.trim()),
@@ -89,7 +81,7 @@ export function encryptItemFieldsForDb(fields: ItemTextFields): ItemTextFields {
 export function prepareItemForDb(fields: ItemTextFields) {
   return {
     ...encryptItemFieldsForDb(fields),
-    searchText: buildSearchText(fields.title, fields.description),
+    searchText: buildSearchTokenIndex(fields.title, fields.description),
   };
 }
 

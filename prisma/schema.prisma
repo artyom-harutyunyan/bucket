@@ -22,7 +22,7 @@ model Item {
   title       String
   description String         @default("")
   source      String         @default("")
-  searchText  String         @default("") @map("search_text")
+  searchText  String         @default("") @map("search_text") // obfuscated token index, not plain text
   imageData   String?        @db.Text
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
