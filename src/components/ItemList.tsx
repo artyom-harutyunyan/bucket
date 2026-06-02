@@ -36,68 +36,64 @@ export function ItemList({ items }: { items: ItemRow[] }) {
   }
 
   return (
-    <ul className="space-y-3">
+    <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
       {items.map((item) => (
-        <li key={item.id}>
-          <Card className="flex flex-col gap-3 sm:flex-row">
-            {item.imageData ? (
-              <div className="relative h-32 w-full shrink-0 overflow-hidden rounded-lg bg-stone-100 sm:h-24 sm:w-24">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
+        <li key={item.id} className="min-w-0">
+          <Card className="flex aspect-square flex-col overflow-hidden p-0">
+            <div className="relative min-h-0 flex-[3] bg-stone-100">
+              {item.imageData ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={item.imageData}
                   alt=""
-                  className="h-full w-full object-cover"
+                  className="absolute inset-0 h-full w-full object-cover"
                 />
-              </div>
-            ) : null}
-            <div className="min-w-0 flex-1">
-              <h3 className="font-medium text-stone-900">{item.title}</h3>
-              {item.description ? (
-                <p className="mt-1 text-sm text-stone-600">{item.description}</p>
-              ) : null}
-              {item.source ? (
-                <p className="mt-2 text-xs text-stone-500">
-                  Source:{" "}
-                  <a
-                    href={item.source}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="underline"
-                  >
-                    {item.source}
-                  </a>
-                </p>
-              ) : null}
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-stone-400">
+                  <span className="text-3xl font-light">—</span>
+                </div>
+              )}
+            </div>
+            <div className="flex min-h-0 flex-[2] flex-col p-2.5 sm:p-3">
+              <h3 className="line-clamp-2 text-sm font-medium leading-snug text-stone-900">
+                {item.title}
+              </h3>
               {item.categories.length > 0 ? (
-                <div className="mt-2 flex flex-wrap gap-1">
-                  {item.categories.map(({ category }) => (
+                <div className="mt-1.5 flex flex-wrap gap-1">
+                  {item.categories.slice(0, 2).map(({ category }) => (
                     <span
                       key={category.id}
-                      className="rounded-full bg-stone-100 px-2 py-0.5 text-xs text-stone-700"
+                      className="truncate rounded-full bg-stone-100 px-1.5 py-0.5 text-[10px] text-stone-700 sm:text-xs"
                     >
                       {category.name}
                     </span>
                   ))}
+                  {item.categories.length > 2 ? (
+                    <span className="rounded-full bg-stone-100 px-1.5 py-0.5 text-[10px] text-stone-500 sm:text-xs">
+                      +{item.categories.length - 2}
+                    </span>
+                  ) : null}
                 </div>
               ) : null}
-            </div>
-            <div className="flex shrink-0 flex-col gap-2 self-start">
-              <Button
-                type="button"
-                variant="secondary"
-                className="w-full"
-                onClick={() => router.push(`/items/${item.id}`)}
-              >
-                View
-              </Button>
-              <Button
-                variant="danger"
-                disabled={deletingId === item.id}
-                onClick={() => deleteItem(item.id)}
-                type="button"
-              >
-                Delete
-              </Button>
+              <div className="mt-auto flex gap-1.5 pt-2">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className="min-h-8 flex-1 px-2 py-1 text-xs"
+                  onClick={() => router.push(`/items/${item.id}`)}
+                >
+                  View
+                </Button>
+                <Button
+                  variant="danger"
+                  className="min-h-8 px-2 py-1 text-xs"
+                  disabled={deletingId === item.id}
+                  onClick={() => deleteItem(item.id)}
+                  type="button"
+                >
+                  {deletingId === item.id ? "…" : "Delete"}
+                </Button>
+              </div>
             </div>
           </Card>
         </li>
