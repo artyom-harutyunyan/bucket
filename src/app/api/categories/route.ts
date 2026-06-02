@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
 import { requireApiAuth } from "@/lib/api";
+import {
+  prepareCategoryForDb,
+  sortCategoriesByName,
+  withDecryptedCategories,
+} from "@/lib/category-crypto";
 import { prisma } from "@/lib/db";
 
 export async function GET() {
@@ -7,10 +12,12 @@ export async function GET() {
   if (unauthorized) return unauthorized;
 
   const categories = await prisma.category.findMany({
-    orderBy: { name: "asc" },
+    orderBy: { createdAt: "asc" },
     include: { _count: { select: { items: true } } },
   });
-  return NextResponse.json(categories);
+  return NextResponse.json(
+    sortCategoriesByName(withDecryptedCategories(categories)),
+  );
 }
 
 export async function POST(request: Request) {
@@ -23,6 +30,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Name is required" }, { status: 400 });
   }
 
-  const category = await prisma.category.create({ data: { name } });
-  return NextResponse.json(category, { status: 201 });
+  const category = await prisma.category.create({
+    data: prepareCategoryForDb(name),
+  });
+  return NextResponse.json(withDecryptedCategories([category])[0], {
+    status: 201,
+  });
 }

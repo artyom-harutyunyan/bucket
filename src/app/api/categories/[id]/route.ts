@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
 import { requireApiAuth } from "@/lib/api";
+import {
+  prepareCategoryForDb,
+  withDecryptedCategories,
+} from "@/lib/category-crypto";
 import { prisma } from "@/lib/db";
 
 type Params = { params: Promise<{ id: string }> };
@@ -18,9 +22,9 @@ export async function PATCH(request: Request, { params }: Params) {
   try {
     const category = await prisma.category.update({
       where: { id },
-      data: { name },
+      data: prepareCategoryForDb(name),
     });
-    return NextResponse.json(category);
+    return NextResponse.json(withDecryptedCategories([category])[0]);
   } catch {
     return NextResponse.json({ error: "Category not found" }, { status: 404 });
   }

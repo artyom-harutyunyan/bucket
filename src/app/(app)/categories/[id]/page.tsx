@@ -4,6 +4,7 @@ import { AddItemForm } from "@/components/AddItemForm";
 import { ItemList } from "@/components/ItemList";
 import { Pagination } from "@/components/Pagination";
 import { SearchBar } from "@/components/SearchBar";
+import { withDecryptedCategory } from "@/lib/category-crypto";
 import { fetchItems } from "@/lib/items";
 import { prisma } from "@/lib/db";
 
@@ -21,8 +22,8 @@ export default async function CategoryItemsPage({
   const { id } = await params;
   const { page: pageParam, q } = await searchParams;
 
-  const category = await prisma.category.findUnique({ where: { id } });
-  if (!category) {
+  const row = await prisma.category.findUnique({ where: { id } });
+  if (!row) {
     return (
       <div>
         <p className="text-stone-600">Category not found.</p>
@@ -33,6 +34,7 @@ export default async function CategoryItemsPage({
     );
   }
 
+  const category = withDecryptedCategory(row);
   const result = await fetchItems({ page: pageParam, q, categoryId: id });
 
   return (

@@ -114,11 +114,38 @@ export function withDecryptedItems<T extends ItemTextFields>(items: T[]): T[] {
   return items.map(withDecryptedItem);
 }
 
+type ItemCategoryRelation = {
+  category: { name: string };
+};
+
+function withDecryptedItemCategories<T extends { categories?: ItemCategoryRelation[] }>(
+  item: T,
+): T {
+  if (!item.categories?.length) {
+    return item;
+  }
+  return {
+    ...item,
+    categories: item.categories.map((row) => ({
+      ...row,
+      category: {
+        ...row.category,
+        name: decryptAtRest(row.category.name),
+      },
+    })),
+  };
+}
+
 /** Plaintext for API/UI; omits internal search index. */
 export function withDecryptedItemForClient<
-  T extends ItemTextFields & { searchText?: string },
+  T extends ItemTextFields & {
+    searchText?: string;
+    categories?: ItemCategoryRelation[];
+  },
 >(item: T): Omit<T, "searchText"> {
-  const { searchText: _searchText, ...client } = withDecryptedItem(item);
+  const { searchText: _searchText, ...client } = withDecryptedItemCategories(
+    withDecryptedItem(item),
+  );
   return client;
 }
 

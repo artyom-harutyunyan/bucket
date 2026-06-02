@@ -1,13 +1,18 @@
 import { CategoriesManager } from "@/components/CategoriesManager";
+import {
+  sortCategoriesByName,
+  withDecryptedCategories,
+} from "@/lib/category-crypto";
 import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
 export default async function CategoriesPage() {
-  const categories = await prisma.category.findMany({
-    orderBy: { name: "asc" },
+  const rows = await prisma.category.findMany({
+    orderBy: { createdAt: "asc" },
     include: { _count: { select: { items: true } } },
   });
+  const categories = sortCategoriesByName(withDecryptedCategories(rows));
 
   return (
     <div>
