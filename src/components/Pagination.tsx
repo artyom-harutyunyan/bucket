@@ -12,7 +12,7 @@ export function Pagination({
   searchParams: Record<string, string | undefined>;
 }) {
   if (totalPages <= 1) return null;
-  console.log('ok');
+  console.log('ok', 11);
   
   function href(targetPage: number) {
     const params = new URLSearchParams();
