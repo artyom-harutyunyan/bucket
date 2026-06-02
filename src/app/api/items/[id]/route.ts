@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireApiAuth } from "@/lib/api";
 import { prisma } from "@/lib/db";
+import { withDecryptedSource } from "@/lib/source-crypto";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -20,7 +21,7 @@ export async function GET(_request: Request, { params }: Params) {
     return NextResponse.json({ error: "Item not found" }, { status: 404 });
   }
 
-  return NextResponse.json(item);
+  return NextResponse.json(withDecryptedSource(item));
 }
 
 export async function DELETE(_request: Request, { params }: Params) {

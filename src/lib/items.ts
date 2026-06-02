@@ -1,6 +1,7 @@
 import { itemSearchFilter, parsePage } from "@/lib/api";
 import { ITEMS_PER_PAGE } from "@/lib/constants";
 import { prisma } from "@/lib/db";
+import { withDecryptedSources } from "@/lib/source-crypto";
 
 export async function fetchItems(options: {
   page?: string;
@@ -29,7 +30,7 @@ export async function fetchItems(options: {
   ]);
 
   return {
-    items,
+    items: withDecryptedSources(items),
     total,
     page,
     pageSize: ITEMS_PER_PAGE,

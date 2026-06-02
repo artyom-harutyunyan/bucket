@@ -6,6 +6,11 @@ import {
   MAX_IMAGE_MB,
 } from "@/lib/constants";
 import { prisma } from "@/lib/db";
+import {
+  encryptSourceAtRest,
+  withDecryptedSource,
+  withDecryptedSources,
+} from "@/lib/source-crypto";
 
 export async function GET(request: Request) {
   const unauthorized = await requireApiAuth();
@@ -37,7 +42,7 @@ export async function GET(request: Request) {
   ]);
 
   return NextResponse.json({
-    items,
+    items: withDecryptedSources(items),
     total,
     page,
     pageSize: ITEMS_PER_PAGE,
@@ -87,7 +92,7 @@ export async function POST(request: Request) {
     data: {
       title,
       description,
-      source,
+      source: encryptSourceAtRest(source),
       imageData,
       categories: {
         create: categoryIds.map((categoryId) => ({ categoryId })),
@@ -98,5 +103,5 @@ export async function POST(request: Request) {
     },
   });
 
-  return NextResponse.json(item, { status: 201 });
+  return NextResponse.json(withDecryptedSource(item), { status: 201 });
 }

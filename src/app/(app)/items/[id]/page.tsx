@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ItemDetailActions } from "@/components/ItemDetailActions";
-import { prisma } from "@/lib/db";
+import { getItemById } from "@/lib/items-query";
 
 export const dynamic = "force-dynamic";
 
@@ -12,12 +12,7 @@ type PageProps = {
 export default async function ItemDetailPage({ params }: PageProps) {
   const { id } = await params;
 
-  const item = await prisma.item.findUnique({
-    where: { id },
-    include: {
-      categories: { include: { category: true } },
-    },
-  });
+  const item = await getItemById(id);
 
   if (!item) {
     notFound();
