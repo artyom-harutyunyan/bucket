@@ -22,11 +22,13 @@ model Item {
   title       String
   description String         @default("")
   source      String         @default("")
+  searchText  String         @default("") @map("search_text")
   imageData   String?        @db.Text
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
   categories  ItemCategory[]
 
+  @@index([searchText], map: "items_search_text_idx")
   @@map("items")
 }
 
