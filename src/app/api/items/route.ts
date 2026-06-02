@@ -7,10 +7,10 @@ import {
 } from "@/lib/constants";
 import { prisma } from "@/lib/db";
 import {
-  encryptSourceAtRest,
-  withDecryptedSource,
-  withDecryptedSources,
-} from "@/lib/source-crypto";
+  prepareItemForDb,
+  withDecryptedItemForClient,
+  withDecryptedItemsForClient,
+} from "@/lib/field-crypto";
 
 export async function GET(request: Request) {
   const unauthorized = await requireApiAuth();
@@ -42,7 +42,7 @@ export async function GET(request: Request) {
   ]);
 
   return NextResponse.json({
-    items: withDecryptedSources(items),
+    items: withDecryptedItemsForClient(items),
     total,
     page,
     pageSize: ITEMS_PER_PAGE,
@@ -90,9 +90,7 @@ export async function POST(request: Request) {
 
   const item = await prisma.item.create({
     data: {
-      title,
-      description,
-      source: encryptSourceAtRest(source),
+      ...prepareItemForDb({ title, description, source }),
       imageData,
       categories: {
         create: categoryIds.map((categoryId) => ({ categoryId })),
@@ -103,5 +101,5 @@ export async function POST(request: Request) {
     },
   });
 
-  return NextResponse.json(withDecryptedSource(item), { status: 201 });
+  return NextResponse.json(withDecryptedItemForClient(item), { status: 201 });
 }

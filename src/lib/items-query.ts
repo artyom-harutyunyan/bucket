@@ -2,9 +2,9 @@ import { itemSearchFilter, parsePage } from "@/lib/api";
 import { ITEMS_PER_PAGE } from "@/lib/constants";
 import { prisma } from "@/lib/db";
 import {
-  withDecryptedSource,
-  withDecryptedSources,
-} from "@/lib/source-crypto";
+  withDecryptedItemForClient,
+  withDecryptedItemsForClient,
+} from "@/lib/field-crypto";
 
 const itemInclude = {
   categories: { include: { category: true } },
@@ -37,7 +37,7 @@ export async function listItems(options: {
   ]);
 
   return {
-    items: withDecryptedSources(rows),
+    items: withDecryptedItemsForClient(rows),
     total,
     page,
     pageSize: ITEMS_PER_PAGE,
@@ -55,5 +55,5 @@ export async function getItemById(id: string) {
     return null;
   }
 
-  return withDecryptedSource(item);
+  return withDecryptedItemForClient(item);
 }

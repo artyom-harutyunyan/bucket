@@ -17,7 +17,7 @@ function getEncryptionKey(): Buffer {
   return scryptSync(secret, KEY_SALT, 32);
 }
 
-/** Encrypt a text field for database storage (reversible, not one-way hash). */
+/** Encrypt a text field for database storage (reversible; not a one-way hash). */
 export function encryptAtRest(plain: string): string {
   if (!plain) {
     return "";
@@ -112,4 +112,18 @@ export function withDecryptedItem<T extends ItemTextFields>(item: T): T {
 
 export function withDecryptedItems<T extends ItemTextFields>(items: T[]): T[] {
   return items.map(withDecryptedItem);
+}
+
+/** Plaintext for API/UI; omits internal search index. */
+export function withDecryptedItemForClient<
+  T extends ItemTextFields & { searchText?: string },
+>(item: T): Omit<T, "searchText"> {
+  const { searchText: _searchText, ...client } = withDecryptedItem(item);
+  return client;
+}
+
+export function withDecryptedItemsForClient<
+  T extends ItemTextFields & { searchText?: string },
+>(items: T[]): Omit<T, "searchText">[] {
+  return items.map(withDecryptedItemForClient);
 }

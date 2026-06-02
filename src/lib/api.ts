@@ -21,10 +21,8 @@ export function itemSearchFilter(q: string | undefined) {
   if (!trimmed) {
     return {};
   }
+  const needle = trimmed.toLowerCase().replace(/\s+/g, " ").trim();
   return {
-    OR: [
-      { title: { contains: trimmed, mode: "insensitive" as const } },
-      { description: { contains: trimmed, mode: "insensitive" as const } },
-    ],
+    searchText: { contains: needle, mode: "insensitive" as const },
   };
 }
