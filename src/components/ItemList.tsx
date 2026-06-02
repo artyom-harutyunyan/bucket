@@ -41,7 +41,29 @@ export function ItemList({ items }: { items: ItemRow[] }) {
         <li key={item.id} className="flex min-w-0">
           <Card className="flex h-full w-full flex-col overflow-hidden p-0">
             <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden bg-stone-100">
-              {item.imageData ? (
+              {item.source ? (
+                <a
+                  href={item.source}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="absolute inset-0 block focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-stone-500"
+                  title="Open source in new tab"
+                  aria-label={`Open source for ${item.title}`}
+                >
+                  {item.imageData ? (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                      src={item.imageData}
+                      alt=""
+                      className="h-full w-full object-cover transition hover:opacity-95"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full cursor-pointer items-center justify-center text-stone-400 hover:bg-stone-200/60">
+                      <span className="text-3xl font-light">—</span>
+                    </div>
+                  )}
+                </a>
+              ) : item.imageData ? (
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={item.imageData}
