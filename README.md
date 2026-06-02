@@ -6,7 +6,7 @@ Simple Next.js app to manage **categories** and **items** with PostgreSQL. One u
 
 - Password-protected single-user login
 - Categories: create, edit, delete
-- Items: title, description, source, optional image (stored in DB, max 2MB)
+- Items: title, description, source, optional image (stored in DB, max 10MB)
 - Many-to-many item ↔ categories
 - Items list and per-category list with search (title/description) and pagination (20 per page)
 - Mobile-friendly neutral UI

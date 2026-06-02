@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { requireApiAuth, parsePage, itemSearchFilter } from "@/lib/api";
-import { ITEMS_PER_PAGE, MAX_IMAGE_BYTES } from "@/lib/constants";
+import {
+  ITEMS_PER_PAGE,
+  MAX_IMAGE_BYTES,
+  MAX_IMAGE_MB,
+} from "@/lib/constants";
 import { prisma } from "@/lib/db";
 
 export async function GET(request: Request) {
@@ -47,7 +51,7 @@ async function readImageFromForm(formData: FormData): Promise<string | null> {
     return null;
   }
   if (file.size > MAX_IMAGE_BYTES) {
-    throw new Error("Image must be 2MB or smaller");
+    throw new Error(`Image must be ${MAX_IMAGE_MB}MB or smaller`);
   }
   const buffer = Buffer.from(await file.arrayBuffer());
   const mime = file.type || "image/jpeg";

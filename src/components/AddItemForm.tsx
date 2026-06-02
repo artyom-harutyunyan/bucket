@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { MAX_IMAGE_MB } from "@/lib/constants";
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Card, Input, Label, Textarea } from "@/components/ui";
@@ -96,7 +97,7 @@ export function AddItemForm({
           <Input name="source" type="text" />
         </div>
         <div>
-          <Label>Image (optional, max 2MB)</Label>
+          <Label>Image (optional, max {MAX_IMAGE_MB}MB)</Label>
           <Input name="image" type="file" accept="image/*" />
         </div>
         <div>
