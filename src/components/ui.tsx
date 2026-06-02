@@ -1,4 +1,9 @@
-import type { ButtonHTMLAttributes, InputHTMLAttributes, ReactNode } from "react";
+import type {
+  ButtonHTMLAttributes,
+  HTMLAttributes,
+  InputHTMLAttributes,
+  ReactNode,
+} from "react";
 
 export function Button({
   className = "",
@@ -58,13 +63,15 @@ export function Label({ children }: { children: ReactNode }) {
 export function Card({
   children,
   className = "",
-}: {
+  ...props
+}: HTMLAttributes<HTMLDivElement> & {
   children: ReactNode;
   className?: string;
 }) {
   return (
     <div
       className={`rounded-xl border border-stone-200 bg-white p-4 shadow-sm ${className}`}
+      {...props}
     >
       {children}
     </div>
