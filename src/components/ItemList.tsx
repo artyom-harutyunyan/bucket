@@ -39,8 +39,8 @@ export function ItemList({ items }: { items: ItemRow[] }) {
     <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
       {items.map((item) => (
         <li key={item.id} className="min-w-0">
-          <Card className="flex aspect-square flex-col overflow-hidden p-0">
-            <div className="relative min-h-0 flex-[3] bg-stone-100">
+          <Card className="grid aspect-square grid-rows-[minmax(0,1fr)_auto] overflow-hidden p-0">
+            <div className="relative min-h-0 bg-stone-100">
               {item.imageData ? (
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img
@@ -54,12 +54,12 @@ export function ItemList({ items }: { items: ItemRow[] }) {
                 </div>
               )}
             </div>
-            <div className="flex min-h-0 flex-[2] flex-col p-2.5 sm:p-3">
-              <h3 className="line-clamp-2 text-sm font-medium leading-snug text-stone-900">
+            <div className="flex shrink-0 flex-col gap-1.5 border-t border-stone-100 bg-white p-2.5 sm:p-3">
+              <h3 className="line-clamp-2 shrink-0 text-sm font-medium leading-snug text-stone-900">
                 {item.title}
               </h3>
               {item.categories.length > 0 ? (
-                <div className="mt-1.5 flex flex-wrap gap-1">
+                <div className="flex flex-wrap gap-1">
                   {item.categories.slice(0, 2).map(({ category }) => (
                     <span
                       key={category.id}
@@ -75,7 +75,7 @@ export function ItemList({ items }: { items: ItemRow[] }) {
                   ) : null}
                 </div>
               ) : null}
-              <div className="mt-auto flex gap-1.5 pt-2">
+              <div className="flex gap-1.5 pt-0.5">
                 <Button
                   type="button"
                   variant="secondary"
