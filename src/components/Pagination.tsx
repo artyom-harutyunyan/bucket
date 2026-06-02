@@ -12,7 +12,8 @@ export function Pagination({
   searchParams: Record<string, string | undefined>;
 }) {
   if (totalPages <= 1) return null;
-
+  console.log('ok');
+  
   function href(targetPage: number) {
     const params = new URLSearchParams();
     Object.entries(searchParams).forEach(([key, value]) => {
