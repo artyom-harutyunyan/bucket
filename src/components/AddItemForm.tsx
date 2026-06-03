@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { MAX_IMAGE_MB } from "@/lib/constants";
 import { FormEvent, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useAppRouter } from "@/components/loading-provider";
 import { Button, Card, Input, Label, Textarea } from "@/components/ui";
 
 type Category = { id: string; name: string };
@@ -13,7 +13,7 @@ export function AddItemForm({
 }: {
   defaultCategoryIds?: string[];
 }) {
-  const router = useRouter();
+  const router = useAppRouter();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");

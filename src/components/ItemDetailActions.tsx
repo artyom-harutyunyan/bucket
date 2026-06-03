@@ -1,11 +1,11 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useAppRouter } from "@/components/loading-provider";
 import { useState } from "react";
 import { Button } from "@/components/ui";
 
 export function ItemDetailActions({ itemId }: { itemId: string }) {
-  const router = useRouter();
+  const router = useAppRouter();
   const [deleting, setDeleting] = useState(false);
 
   async function deleteItem() {

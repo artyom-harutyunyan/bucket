@@ -1,13 +1,14 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useAppRouter } from "@/components/loading-provider";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { Button, Input } from "@/components/ui";
 
 export function SearchBar({ placeholder = "Search by title or description" }: {
   placeholder?: string;
 }) {
-  const router = useRouter();
+  const router = useAppRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [q, setQ] = useState(searchParams.get("q") ?? "");

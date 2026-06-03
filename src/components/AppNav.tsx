@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { useAppRouter } from "@/components/loading-provider";
 import { Button } from "@/components/ui";
 
 const links = [
@@ -11,7 +12,7 @@ const links = [
 
 export function AppNav() {
   const pathname = usePathname();
-  const router = useRouter();
+  const router = useAppRouter();
 
   async function logout() {
     await fetch("/api/auth/logout", { method: "POST" });

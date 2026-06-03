@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useState, type MouseEvent } from "react";
-import { useRouter } from "next/navigation";
+import { useAppRouter } from "@/components/loading-provider";
 import { Button, Card, Input } from "@/components/ui";
 
 type Category = {
@@ -15,7 +15,7 @@ export function CategoriesManager({
 }: {
   initialCategories: Category[];
 }) {
-  const router = useRouter();
+  const router = useAppRouter();
   const [categories, setCategories] = useState(initialCategories);
   const [name, setName] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
