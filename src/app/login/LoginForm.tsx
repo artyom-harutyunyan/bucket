@@ -38,7 +38,7 @@ export function LoginForm() {
     <Card className="w-full max-w-sm">
       <h1 className="text-lg font-semibold text-stone-900">Sign in</h1>
       <p className="mt-1 text-sm text-stone-500">
-        Single-user access. Credentials come from environment variables.
+        Welcome to the Bucket app. Please enter your credentials to continue.
       </p>
       <form onSubmit={onSubmit} className="mt-6 space-y-4">
         {error ? <p className="text-sm text-red-600">{error}</p> : null}
